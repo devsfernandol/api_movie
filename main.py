@@ -22,11 +22,11 @@ movies =[
         {
 
         "id":2,
-        "title":"Avatar",
-        "overview":"En mundo Extrano",
-        "year":"2009",
-        "ranting":1.7,
-        "category":"Ficcion"
+        "title":"Rapido y Furiso",
+        "overview":"Brian trata de integrarse a un grupo de corredores iligales",
+        "year":"2001",
+        "ranting":10,
+        "category":"Accion"
         
     }
 ]
@@ -53,3 +53,8 @@ def get_movie(id:int):
             return item
         
     return []
+
+@app.get('/movies/', tags=['Movies'])
+
+def get_movies_category(category:str, year:int):
+    return category
