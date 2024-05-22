@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field ,  conint, confloat
 from typing import Optional 
 
 app=FastAPI()
@@ -9,11 +9,27 @@ app.version="0.0"
 
 class Movie(BaseModel):
     id: Optional[int] = None
-    title: str
-    overview: str
-    year: int
-    rating: float
-    category: str
+    title: str = Field(min_length=5 ,max_length=10)
+    overview: str = Field(min_length=10 ,max_length=50)
+    year: int = Field(le=2024)
+    rating: float = Field (le=2)
+    category: str =Field (min_length=2 , max_length=5)
+
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": 1,
+                "title": "Titulo",
+                "overview": "descripcion",
+                "year": 2022,
+                "rating": 1.5,
+                "category": "Accion"
+            }
+        }
+        
+
+
 
 
 movies =[
