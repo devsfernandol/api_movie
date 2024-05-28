@@ -94,7 +94,7 @@ def login(user:User):
 
         return JSONResponse(status_code=200, content=token)
 
-@app.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200, dependencies=[Depends(JWTBearer)])
+@app.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
 
 def get_movies() -> list[Movie]:
     return JSONResponse(status_code=200 ,content=movies)
