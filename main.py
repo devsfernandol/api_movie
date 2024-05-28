@@ -2,10 +2,17 @@ from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field ,  conint, confloat
 from typing import Optional, List
+from jwt_manager import create_token
 
 app=FastAPI()
 app.title="FastAPI Para Peliculas"
 app.version="0.0"
+
+
+class User(BaseModel):
+    email : str
+    password: str
+
 
 class Movie(BaseModel):
     id: Optional[int] = None
@@ -64,6 +71,12 @@ movies =[
 def message():
 
     return "Hello world"
+
+
+@app.post('/login', tags=['auth'])
+
+def login(user:User):
+    return user
 
 @app.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200)
 
