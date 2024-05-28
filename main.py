@@ -6,7 +6,7 @@ from typing import Coroutine, Optional, List
 from jwt_manager import create_token, validate_token
 from fastapi.security import HTTPBearer
 from config.database import Session, engine, Base
-from models.movie import Movie
+from models.movie import Movie as MovieModel
 
 app=FastAPI()
 app.title="FastAPI Para Peliculas"
@@ -126,7 +126,13 @@ def get_movies_category(category:str) -> list[Movie]:
 
 def create_movies(movie : Movie) -> dict:
 
-    movies.append(movie.model_dump())
+    db= Session()
+    new_movie = MovieModel(**movie.model_dump())
+
+    db.add(new_movie)
+
+    db.commit()
+    
 
     return JSONResponse(status_code=201,content={"message":"Se ha agreado la pelicula"})
 
