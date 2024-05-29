@@ -31,11 +31,11 @@ class User(BaseModel):
 
 class Movie(BaseModel):
     id: Optional[int] = None
-    title: str = Field(min_length=5 ,max_length=10)
-    overview: str = Field(min_length=10 ,max_length=50)
+    title: str = Field(min_length=5 ,max_length=30)
+    overview: str = Field(min_length=5 ,max_length=100)
     year: int = Field(le=2024)
-    rating: float = Field (le=2)
-    category: str =Field (min_length=2 , max_length=10)
+    rating: float = Field ()
+    category: str =Field (min_length=2 , max_length=30)
 
 
     class Config:
