@@ -110,12 +110,15 @@ def get_movies() -> list[Movie]:
 @app.get('/movies/{id}', tags=['Movies'], response_model=Movie)
 
 def get_movie(id:int) -> Movie:
+
+    db= Session()
+    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+
+    if not result:
+        return JSONResponse(status_code=200, content={'message':"No Existe"})
     
-    for item in movies:
-        if item["id"] == id:
-            return JSONResponse(content=item)
         
-    return JSONResponse(status_code=404,content=[])
+    return JSONResponse(status_code=404,content=jsonable_encoder(result))
 
 @app.get('/movies/', tags=['Movies'], response_model=list[Movie], status_code=200)
 
