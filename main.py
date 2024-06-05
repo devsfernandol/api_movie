@@ -123,10 +123,15 @@ def get_movie(id:int) -> Movie:
 @app.get('/movies/', tags=['Movies'], response_model=list[Movie], status_code=200)
 
 def get_movies_category(category:str) -> list[Movie]:
+
+    db = Session()
+    result= db.query(MovieModel).filter(MovieModel.category == category).all()
+
+    if not result:
+        return JSONResponse( status_code=200 , content={'message':"NO hay una pelicula con esa categoria"})
+
     
-    data= [item for item in movies if item['category'] == category ]
-    
-    return JSONResponse(status_code=200,content=data)
+    return JSONResponse(status_code=200,content=jsonable_encoder(result))
 
 
 @app.post('/movies/', tags=['Movies'], response_model=dict, status_code=201)
