@@ -9,6 +9,7 @@ from config.database import Session
 from models.movie import Movie as MovieModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
+from services.movie import MovieService
 
 
 movie_router = APIRouter()
@@ -37,11 +38,11 @@ class Movie(BaseModel):
 
 
 
-@movie_router.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
+@movie_router.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200, dependencies=[Depends(JWTBearer())] )
 
 def get_movies() -> list[Movie]:
     db= Session()
-    result = db.query(MovieModel).all()
+    result = MovieService(db).get_movies()
 
     return JSONResponse(status_code=200 ,content=jsonable_encoder(result))
 
@@ -50,7 +51,7 @@ def get_movies() -> list[Movie]:
 def get_movie(id:int) -> Movie:
 
     db= Session()
-    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+    result = MovieService(db).get_movies(id)
 
     if not result:
         return JSONResponse(status_code=200, content={'message':"No Existe"})
