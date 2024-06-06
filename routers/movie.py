@@ -85,12 +85,12 @@ def update_movie(id: int , movie:Movie) -> dict:
 def delete_movie(id : int) -> dict:
 
     db= Session()
-    result= db.query(MovieModel).filter(MovieModel.id == id).first()
+    result= MovieService(db).get_movies(id)
     if not result:
         return JSONResponse(status_code=200, content={'message':"No Existe"})
     
-    db.delete(result)
-    db.commit()
-
+    MovieService(db).delete_movie(id)
+    
+    
  
     return JSONResponse(status_code=201,content={"message":"Se ha eliminado la pelicula"})
