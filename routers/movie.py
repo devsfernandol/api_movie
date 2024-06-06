@@ -10,31 +10,11 @@ from models.movie import Movie as MovieModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.movie import MovieService
-
+from schemas.movie import Movie
 
 movie_router = APIRouter()
 
-class Movie(BaseModel):
-    id: Optional[int] = None
-    title: str = Field(min_length=5 ,max_length=30)
-    overview: str = Field(min_length=5 ,max_length=100)
-    year: int = Field(le=2024)
-    rating: float = Field ()
-    category: str =Field (min_length=2 , max_length=30)
 
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "id": 1,
-                "title": "Titulo",
-                "overview": "descripcion",
-                "year": 2022,
-                "rating": 1.5,
-                "category": "Accion"
-            }
-        }
-        
 
 
 
@@ -78,11 +58,9 @@ def get_movies_category(category:str) -> list[Movie]:
 def create_movies(movie : Movie) -> dict:
 
     db= Session()
-    new_movie = MovieModel(**movie.model_dump())
 
-    db.add(new_movie)
+    MovieService(db).create_movie(movie)
 
-    db.commit()
     
 
     return JSONResponse(status_code=201,content={"message":"Se ha agreado la pelicula"})
@@ -93,17 +71,13 @@ def create_movies(movie : Movie) -> dict:
 def update_movie(id: int , movie:Movie) -> dict:
 
     db= Session()
-    result= db.query(MovieModel).filter(MovieModel.id == id).first()
+    result= MovieService(db).get_movies(id)
     if not result:
         return JSONResponse(status_code=200, content={'message':"No Existe"})
     
-    result.title = movie.title
-    result.overview = movie.overview
-    result.year = movie.year
-    result.rating = movie.rating
-    result.category = movie.category
+    MovieService(db).update_movie(id, movie )
+    
 
-    db.commit()
     return JSONResponse(status_code=200,content={"message":"Se ha Actulizado la Pelicula"})
 
 @movie_router.delete('/movies/{id}', tags=['Movies'], response_model=dict, status_code=200)
