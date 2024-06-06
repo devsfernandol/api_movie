@@ -8,6 +8,8 @@ from fastapi.security import HTTPBearer
 from config.database import Session, engine, Base
 from models.movie import Movie as MovieModel
 from fastapi.encoders import jsonable_encoder
+from middlewares.error_handler import ErrorHandler
+from middlewares.jwt_bearer import JWTBearer
 
 app=FastAPI()
 app.title="FastAPI Para Peliculas"
@@ -17,12 +19,8 @@ app.version="0.0"
 Base.metadata.create_all(bind=engine)
 
 
-class JWTBearer(HTTPBearer):
-    async def __call__(self, request: Request):
-        auth = await super().__call__(request)
-        data =validate_token(auth.credentials)
-        if data['email'] != "admin@gmail.com":
-            raise HTTPException(status_code=403, detail="Credenciales Invalidas")
+app.add_middleware(ErrorHandler)
+
 
 
 class User(BaseModel):
