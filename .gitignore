@@ -1,2 +1,3 @@
 api-movie/
 __pycache__/
+middlewares/__pycache__
