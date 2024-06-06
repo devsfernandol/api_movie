@@ -18,4 +18,7 @@ class MovieService():
 
        return result
     
-    
+    def get_movies_category(self, category):
+
+        result = self.db.query(MovieModel).filter(MovieModel.category == category).all()
+        return result

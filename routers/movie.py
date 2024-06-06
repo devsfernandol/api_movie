@@ -64,7 +64,7 @@ def get_movie(id:int) -> Movie:
 def get_movies_category(category:str) -> list[Movie]:
 
     db = Session()
-    result= db.query(MovieModel).filter(MovieModel.category == category).all()
+    result= MovieService(db).get_movies_category(category)
 
     if not result:
         return JSONResponse( status_code=200 , content={'message':"NO hay una pelicula con esa categoria"})
