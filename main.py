@@ -109,7 +109,7 @@ def get_movies() -> list[Movie]:
 
 def get_movie(id:int) -> Movie:
 
-    db= Session
+    db= Session()
     result = db.query(MovieModel).filter(MovieModel.id == id).first()
 
     if not result:
