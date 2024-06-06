@@ -7,6 +7,7 @@ from fastapi.security import HTTPBearer
 from config.database import  engine, Base
 from middlewares.error_handler import ErrorHandler
 from routers.movie import movie_router
+from routers.auth import usuario_router
 app=FastAPI()
 app.title="FastAPI Para Peliculas"
 app.version="0.0"
@@ -17,12 +18,7 @@ Base.metadata.create_all(bind=engine)
 
 app.add_middleware(ErrorHandler)
 app.include_router(movie_router)
-
-
-
-class User(BaseModel):
-    email : str
-    password: str
+app.include_router(usuario_router)
 
 
 
@@ -61,13 +57,4 @@ def message():
     return "Hello world"
 
 
-@app.post('/login', tags=['auth'])
-
-def login(user:User):
-
-    if user.email=="admin@gmail.com" and user.password=="admin":
-
-        token : str = create_token(user.dict())
-
-        return JSONResponse(status_code=200, content=token)
 
