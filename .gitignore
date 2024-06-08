@@ -1,3 +1,4 @@
 api-movie/
 __pycache__/
 middlewares/__pycache__
+database.sqlite
