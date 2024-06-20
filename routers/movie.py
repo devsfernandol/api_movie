@@ -18,11 +18,11 @@ movie_router = APIRouter()
 
 
 
-@movie_router.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200, dependencies=[Depends(JWTBearer())] )
+@movie_router.get('/movies', tags=['Movies'], response_model=list[Movie], status_code=200,  )
 
 def get_movies() -> list[Movie]:
     db= Session()
-    result = MovieService(db).get_movies()
+    result = MovieService(db).get_movies_all()
 
     return JSONResponse(status_code=200 ,content=jsonable_encoder(result))
 

@@ -8,7 +8,7 @@ class MovieService():
 
 
 
-    def get_movies(self):
+    def get_movies_all(self):
        result= self.db.query(MovieModel).all()
 
        return result
